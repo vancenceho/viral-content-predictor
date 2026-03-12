@@ -1,0 +1,12 @@
+pandas
+numpy
+matplotlib
+seaborn
+streamlit
+scikit-learn
+jupyter
+scipy
+statsmodels
+xarray
+dask
+kaggle
