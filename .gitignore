@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # secrets
 secrets.sh
+
+# models
+notebooks/models/*.joblib
