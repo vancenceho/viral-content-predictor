@@ -485,3 +485,13 @@ secrets.sh
 
 # models
 notebooks/models/*.joblib
+data/raw/youtube_audio/Can't Help Falling In Love.wav
+data/raw/youtube_audio/Comedy.wav
+data/raw/youtube_audio/Days I Will Remember.wav
+data/raw/youtube_audio/Ghost - Acoustic.wav
+data/raw/youtube_audio/Hold On.wav
+data/raw/youtube_audio/Hunger.wav
+data/raw/youtube_audio/I'm Yours.wav
+data/raw/youtube_audio/Lucky.wav
+data/raw/youtube_audio/Say Something.wav
+data/raw/youtube_audio/To Begin Again.wav

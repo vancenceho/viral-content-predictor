@@ -11,3 +11,7 @@ statsmodels
 xarray
 dask
 kaggle
+librosa
+soundfile
+audioread
+tqdm
