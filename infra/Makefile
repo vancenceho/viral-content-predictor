@@ -62,6 +62,13 @@ destroy: ## Destroy all infrastructure (WARNING: Destructive)
 	tofu destroy
 	@echo "${GREEN}✓ Infrastructure destroyed successfully!${NC}"
 
+plan-destroy: ## Show execution plan for destroy
+	@echo "${YELLOW}Previewing execution plan for destroy...${NC}"
+	@echo "$(RED)WARNING: This will show what resources will be destroyed.$(NC)"
+	@echo ""
+	tofu plan -destroy
+	@echo "${GREEN}✓ Execution plan for destroy complete.${NC}"
+
 output: ## Display all OpenTofu outputs
 	@tofu output
 
