@@ -486,3 +486,7 @@ secrets.sh
 
 # models
 notebooks/models/*.joblib
+
+# project shell/python helpers - not Windows venv Scripts/
+!scripts/
+!scripts/**
