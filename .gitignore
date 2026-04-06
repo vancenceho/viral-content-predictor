@@ -223,6 +223,7 @@ __marimo__/
 *.tax2010
 *.vcf
 *.xml
+*.parquet
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
