@@ -184,8 +184,9 @@ $RECYCLE.BIN/
 
 # ===== AUDIO FILES (LARGE - DO NOT COMMIT) =====
 # Ignore ALL .wav files in the youtube_audio directory
-data/raw/youtube_audio/*.wav
-data/raw/youtube_audio/**/*.wav
+# Audio files (large)
+data/raw/youtube_audio/*.mp3  # ← Changed from .wav
+data/raw/youtube_audio/**/*.mp3
 
 # ===== PROCESSED DATA CSVs (CAN BE REGENERATED) =====
 # These are outputs from processing - don't commit them
