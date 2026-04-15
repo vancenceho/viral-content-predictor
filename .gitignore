@@ -487,6 +487,9 @@ secrets.sh
 # models
 notebooks/models/*.joblib
 
+# vectorizers
+data/processed/*.joblib
+
 # project shell/python helpers - not Windows venv Scripts/
 !scripts/
 !scripts/**
