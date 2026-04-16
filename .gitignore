@@ -295,7 +295,6 @@ data/raw/youtube_audio/*.webm.part
 data/raw/youtube_audio/**/*.webm.part
 data/raw/youtube_audio/*.webm
 data/raw/youtube_audio/*.m4a
-*.ipynb
 notebooks/progree.ipynb
 notebooks/05_parallel_match_download.ipynb
 data/raw/youtube_metadata.csv
