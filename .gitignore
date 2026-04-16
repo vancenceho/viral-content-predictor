@@ -224,3 +224,78 @@ secrets.sh
 *.tax2010
 *.vcf
 *.xml
+
+# ==============================================================================
+# AUDIO FILES - MP3s (100+ GB - DO NOT COMMIT!)
+# ==============================================================================
+data/raw/youtube_audio/*.mp3
+data/raw/youtube_audio/**/*.mp3
+ 
+# ==============================================================================
+# RAW DATA - INTERMEDIATE/WORK-IN-PROGRESS FILES
+# ==============================================================================
+# In-progress dataset (work file, not final)
+data/raw/in_progress_dataset.csv
+ 
+# Batch processing results (can be regenerated)
+data/raw/batch2_match_download_results.csv
+data/raw/batch2_youtube_metadata.csv
+ 
+# Combined results (can be regenerated)
+data/raw/combined_match_download_results.csv
+ 
+# ==============================================================================
+# PROCESSED DATA - OLD/SUPERSEDED FILES
+# ==============================================================================
+# Old unfiltered version (superseded by cleaned versions)
+data/processed/modeling_dataset.csv
+ 
+# ==============================================================================
+# KEEP FINAL CLEANED DATASETS (OVERRIDE)
+# ==============================================================================
+# Make sure these are NOT ignored
+!data/processed/youtube_features_cleaned.csv
+!data/processed/combined_features_cleaned.csv
+!data/processed/spotify_tracks_cleaned.csv
+ 
+# ==============================================================================
+# NOTEBOOKS - WORK-IN-PROGRESS/OLD
+# ==============================================================================
+# Development notebooks (intermediate steps)
+notebooks/02_spotify_model_baseline.ipynb
+notebooks/03_youtube_matching.ipynb
+notebooks/04a_youtube_matching_ytdlp.ipynb
+notebooks/04b_youtube_audio_download.ipynb
+notebooks/05_parallel_match_download.ipynb
+notebooks/05b_batch2_DOWNLOAD_METADATA.ipynb
+notebooks/06_collect_youtube_metadata.ipynb
+notebooks/07_collect_youtube_metadata_NEW.ipynb
+notebooks/08_full_feature_extraction.ipynb
+notebooks/test_feature_extraction.ipynb
+notebooks/youtube_audio_features.ipynb
+notebooks/progree.ipynb
+ 
+# Testing notebooks
+notebooks/test_*.ipynb
+notebooks/*test*.ipynb
+notebooks/scratch*.ipynb
+ 
+# ==============================================================================
+# MODELS - LARGE TRAINED MODEL FILES
+# ==============================================================================
+models/*.joblib
+models/*.pkl
+models/*.h5
+models/*.pt
+models/*.pth
+
+data/raw/youtube_audio/*.part
+data/raw/youtube_audio/**/*.part
+data/raw/youtube_audio/*.webm.part
+data/raw/youtube_audio/**/*.webm.part
+data/raw/youtube_audio/*.webm
+data/raw/youtube_audio/*.m4a
+*.ipynb
+notebooks/progree.ipynb
+notebooks/05_parallel_match_download.ipynb
+data/raw/youtube_metadata.csv
