@@ -486,6 +486,7 @@ secrets.sh
 
 # models
 notebooks/models/*.joblib
+notebooks/models/metadata/*.json
 
 # vectorizers
 data/processed/*.joblib
