@@ -1,0 +1,15 @@
+{
+  "batch_1_your_work": {
+    "date_completed": "2026-04-14",
+    "song_range": "0-51,579",
+    "downloads": 45790,
+    "features_extracted": 44271,
+    "metadata_collected": 41150,
+    "status": "COMPLETE - MP3s can be deleted"
+  },
+  "batch_2_for_groupmate": {
+    "song_range": "57,001-83,999",
+    "total_songs": 26999,
+    "status": "TODO - starting after batch 1 MP3 deletion"
+  }
+}
