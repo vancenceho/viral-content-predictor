@@ -205,8 +205,9 @@ models/*.pth
 # Saved artifacts from notebooks (e.g. 07_combined_model_training → notebooks/models/)
 notebooks/models/**/*.joblib
 notebooks/models/**/*.pkl
-notebooks/models/**/*.png
 notebooks/models/metadata/
+# Generated plots (from notebooks; regenerate from training cells)
+notebooks/images/**/*.png
 
 # ----- SECRETS -----
 secrets.sh
