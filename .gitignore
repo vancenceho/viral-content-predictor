@@ -179,12 +179,16 @@ $RECYCLE.BIN/
 # PROJECT-SPECIFIC
 # ==========================================
 
-# Data: raw/processed/interim stay out of git (regenerate via notebooks/scripts).
-# cleaned/ may be committed (e.g. spotify_tracks_cleaned.csv, lyrics_cleaned.csv).
+# Data: raw/processed/cleaned/interim stay out of git (use Makefile / Hugging Face downloads).
+# Keep only .gitkeep and .gitattributes under data/raw/ and data/cleaned/ (LFS pointers / metadata).
 data/raw/**
+data/cleaned/**
 data/processed/**
 data/interim/**
 !data/raw/.gitkeep
+!data/raw/.gitattributes
+!data/cleaned/.gitkeep
+!data/cleaned/.gitattributes
 !data/processed/.gitkeep
 
 # Trained weights & large artifacts (download from Hugging Face; do not commit)
