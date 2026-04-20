@@ -48,6 +48,8 @@ if [[ "$SKIP" != "0" && "$SKIP" != "false" ]] && [[ -f "${LOCAL_DIR}/dataset.csv
 fi
 
 echo "Downloading ${HF_SPOTIFY_REPO} → ${LOCAL_DIR}"
-"${HF_DL[@]}" "${HF_SPOTIFY_REPO}" --repo-type dataset --local-dir "${LOCAL_DIR}"
+# Skip Hub repo docs (does not delete an existing local data/raw/README.md you maintain yourself)
+"${HF_DL[@]}" "${HF_SPOTIFY_REPO}" --repo-type dataset --local-dir "${LOCAL_DIR}" \
+  --exclude 'README.md' --exclude 'readme.md' --exclude 'README.rst' --exclude 'README.txt' --exclude 'README'
 rename_dataset
 echo "Done."
