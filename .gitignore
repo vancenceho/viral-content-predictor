@@ -202,10 +202,9 @@ models/*.pkl
 models/*.h5
 models/*.pt
 models/*.pth
-# Saved artifacts from notebooks (e.g. 07_combined_model_training → notebooks/models/)
-notebooks/models/**/*.joblib
-notebooks/models/**/*.pkl
-notebooks/models/metadata/
+# notebooks/models/ — placeholder only. Do not commit trained weights; download from Hugging Face for inference/ensemble.
+notebooks/models/**
+!notebooks/models/.gitkeep
 # Generated plots (from notebooks; regenerate from training cells)
 notebooks/images/**/*.png
 
