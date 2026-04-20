@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics
+.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-data-hf
 
 # Colors
 GREEN  = \033[0;32m
@@ -73,7 +73,7 @@ setup: venv ## Install the dependencies, if venv doesn't exist
 	@echo "${GREEN}Dependencies installed successfully!${NC}"
 
 
-download-spotify: setup ## Download the Spotify dataset from Kaggle
+download-spotify: setup ## Download Spotify tracks from Hugging Face (vancenceho/spotify-tracks → data/raw/)
 	@echo "${YELLOW}Downloading Spotify dataset...${NC}"
 	bash scripts/download-spotify.sh
 	@echo "${GREEN}Spotify dataset downloaded successfully!${NC}"
