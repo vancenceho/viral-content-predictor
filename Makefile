@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean
+.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean
 
 # Colors
 GREEN  = \033[0;32m
@@ -91,4 +91,9 @@ download-youtube-audio-features: setup ## Download YouTube/Spotify audio feature
 download-spotify-tracks-clean: setup ## Download cleaned Spotify tracks (vancenceho/spotify-tracks-clean → data/cleaned/)
 	@echo "${YELLOW}Downloading spotify-tracks-clean...${NC}"
 	bash scripts/download-spotify-tracks-clean.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-spotify-lyrics-clean: setup ## Download cleaned lyrics (vancenceho/spotify-lyrics-clean → data/cleaned/lyrics_cleaned.csv)
+	@echo "${YELLOW}Downloading spotify-lyrics-clean...${NC}"
+	bash scripts/download-spotify-lyrics-clean.sh
 	@echo "${GREEN}Download finished.${NC}"
