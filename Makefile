@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features
+.PHONY: help setup venv cleanup setup-huggingface download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features
 
 # Colors
 GREEN  = \033[0;32m
@@ -49,15 +49,16 @@ cleanup: ## Clean up the project
 # Custom targets
 # ------------------------------------------------------------
 
-setup-kaggle: ## Setup kaggle credentials
-	@echo "${YELLOW}Setting up Kaggle credentials...${NC}"
-	bash scripts/setup-kaggle.sh
-	@echo "${GREEN}Kaggle credentials setup successfully!${NC}"
+setup-huggingface: venv ## Install huggingface_hub and run hf auth login (Hub token)
+	@echo "${YELLOW}Installing huggingface_hub (if needed)...${NC}"
+	${PIP} install -q "huggingface_hub>=0.20.0"
+	@echo "${YELLOW}Hugging Face Hub login...${NC}"
+	bash scripts/setup-huggingface.sh
+	@echo "${GREEN}Hugging Face CLI configured.${NC}"
 	@echo ""
 	@echo "$(YELLOW)Next steps:$(NC)"
-	@echo "  1) Activate venv, run: 'source ${VENV_DIR}/bin/activate'"
-	@echo "  2) Install Kaggle API, run: 'pip install kaggle' (if not already installed)"
-	@echo "  3) Verify Kaggle API, run: 'kaggle -version'"
+	@echo "  Test:  ${VENV_DIR}/bin/hf auth whoami"
+	@echo "  Data:  make download-spotify   (and other make download-* targets)"
 
 
 venv: ## Create a virtual environment if it doesn't exist
