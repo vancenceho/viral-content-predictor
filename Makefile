@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean
+.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features
 
 # Colors
 GREEN  = \033[0;32m
@@ -101,4 +101,9 @@ download-spotify-lyrics-clean: setup ## Download cleaned lyrics (vancenceho/spot
 download-youtube-features-clean: setup ## Download cleaned YouTube features (vancenceho/youtube-features-clean → data/processed/)
 	@echo "${YELLOW}Downloading youtube-features-clean...${NC}"
 	bash scripts/download-youtube-features-clean.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-vcp-combined-features: setup ## Download combined ensemble features (vancenceho/vcp-combined-features → data/processed/)
+	@echo "${YELLOW}Downloading vcp-combined-features...${NC}"
+	bash scripts/download-vcp-combined-features.sh
 	@echo "${GREEN}Download finished.${NC}"
