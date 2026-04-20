@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-data-hf
+.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics download-youtube-audio-features
 
 # Colors
 GREEN  = \033[0;32m
@@ -82,3 +82,8 @@ download-lyrics: setup ## Download Spotify lyrics from Hugging Face (vancenceho/
 	@echo "${YELLOW}Downloading Lyrics dataset...${NC}"
 	bash scripts/download-lyrics.sh
 	@echo "${GREEN}Lyrics dataset downloaded successfully!${NC}"
+
+download-youtube-audio-features: setup ## Download YouTube/Spotify audio features (vancenceho/youtube-spotify-audio-features → data/raw/)
+	@echo "${YELLOW}Downloading youtube-spotify-audio-features...${NC}"
+	bash scripts/download-youtube-audio-features.sh
+	@echo "${GREEN}Download finished.${NC}"
