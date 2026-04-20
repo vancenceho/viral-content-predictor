@@ -78,7 +78,7 @@ download-spotify: setup ## Download Spotify tracks from Hugging Face (vancenceho
 	bash scripts/download-spotify.sh
 	@echo "${GREEN}Spotify dataset downloaded successfully!${NC}"
 
-download-lyrics: setup ## Download the Lyrics dataset from Kaggle
+download-lyrics: setup ## Download Spotify lyrics from Hugging Face (vancenceho/spotify-lyrics → data/raw/spotify_millsongdata.csv)
 	@echo "${YELLOW}Downloading Lyrics dataset...${NC}"
 	bash scripts/download-lyrics.sh
 	@echo "${GREEN}Lyrics dataset downloaded successfully!${NC}"
