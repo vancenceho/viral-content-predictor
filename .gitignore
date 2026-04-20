@@ -179,14 +179,13 @@ $RECYCLE.BIN/
 # PROJECT-SPECIFIC
 # ==========================================
 
-# Data (large / reproducible via Makefile & scripts). Keep only .gitkeep per tree.
+# Data: raw/processed/interim stay out of git (regenerate via notebooks/scripts).
+# cleaned/ may be committed (e.g. spotify_tracks_cleaned.csv, lyrics_cleaned.csv).
 data/raw/**
 data/processed/**
-data/cleaned/**
 data/interim/**
 !data/raw/.gitkeep
 !data/processed/.gitkeep
-!data/cleaned/.gitkeep
 
 # Trained weights & large artifacts (download from Hugging Face; do not commit)
 models/*.joblib
