@@ -182,37 +182,39 @@ $RECYCLE.BIN/
 # PROJECT-SPECIFIC IGNORES
 # ==========================================
 
-# ===== AUDIO FILES (LARGE - DO NOT COMMIT) =====
-# Ignore ALL .wav files in the youtube_audio directory
-# Audio files (large)
-data/raw/youtube_audio/*.mp3  # ← Changed from .wav
-data/raw/youtube_audio/**/*.mp3
+# ----- DATA: do not commit (large / reproducible; use scripts, Makefile, README) -----
+# Ignore all dataset outputs. Keep only .gitkeep so empty dirs stay in the repo.
+data/raw/**
+data/processed/**
+data/cleaned/**
+data/interim/**
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/cleaned/.gitkeep
 
-# ===== PROCESSED DATA CSVs (CAN BE REGENERATED) =====
-# These are outputs from processing - don't commit them
-data/raw/combined_match_download_results.csv
-data/raw/youtube_matches.csv
-data/raw/youtube_download_status.csv
-data/interim/youtube_audio_features*.csv
-data/processed/*.csv
+# Explicit extras (redundant with ** above; kept for clarity)
+data/**/*.parquet
 
-# ===== KEEP IMPORTANT CSVs (OVERRIDE ABOVE) =====
-# IMPORTANT: Keep the original Spotify dataset!
-!data/raw/spotify_tracks.csv
-!data/raw/spotify_cleaned.csv
-
-# ===== MODEL FILES (LARGE) =====
+# ----- MODEL FILES (LARGE) -----
+# Repo-root models/ (if used)
 models/*.joblib
 models/*.pkl
 models/*.h5
 models/*.pt
+models/*.pth
+# Saved artifacts from notebooks (e.g. 07_combined_model_training → notebooks/models/)
+notebooks/models/**/*.joblib
+notebooks/models/**/*.pkl
+notebooks/models/metadata/
+# Generated plots (from notebooks; regenerate from training cells)
+notebooks/images/**/*.png
 
-# ===== SECRETS =====
+# ----- SECRETS -----
 secrets.sh
 *.env
 .env.local
 
-# ===== OTHER DATA FILES =====
+# ----- OTHER DATA FILES -----
 *.dat
 *.efx
 *.gbr
@@ -225,39 +227,6 @@ secrets.sh
 *.vcf
 *.xml
 
-# ==============================================================================
-# AUDIO FILES - MP3s (100+ GB - DO NOT COMMIT!)
-# ==============================================================================
-data/raw/youtube_audio/*.mp3
-data/raw/youtube_audio/**/*.mp3
- 
-# ==============================================================================
-# RAW DATA - INTERMEDIATE/WORK-IN-PROGRESS FILES
-# ==============================================================================
-# In-progress dataset (work file, not final)
-data/raw/in_progress_dataset.csv
- 
-# Batch processing results (can be regenerated)
-data/raw/batch2_match_download_results.csv
-data/raw/batch2_youtube_metadata.csv
- 
-# Combined results (can be regenerated)
-data/raw/combined_match_download_results.csv
- 
-# ==============================================================================
-# PROCESSED DATA - OLD/SUPERSEDED FILES
-# ==============================================================================
-# Old unfiltered version (superseded by cleaned versions)
-data/processed/modeling_dataset.csv
- 
-# ==============================================================================
-# KEEP FINAL CLEANED DATASETS (OVERRIDE)
-# ==============================================================================
-# Make sure these are NOT ignored
-!data/processed/youtube_features_cleaned.csv
-!data/processed/combined_features_cleaned.csv
-!data/processed/spotify_tracks_cleaned.csv
- 
 # ==============================================================================
 # NOTEBOOKS - WORK-IN-PROGRESS/OLD
 # ==============================================================================
@@ -279,38 +248,3 @@ notebooks/progree.ipynb
 notebooks/test_*.ipynb
 notebooks/*test*.ipynb
 notebooks/scratch*.ipynb
- 
-# ==============================================================================
-# MODELS - LARGE TRAINED MODEL FILES
-# ==============================================================================
-models/*.joblib
-models/*.pkl
-models/*.h5
-models/*.pt
-models/*.pth
-
-data/raw/youtube_audio/*.part
-data/raw/youtube_audio/**/*.part
-data/raw/youtube_audio/*.webm.part
-data/raw/youtube_audio/**/*.webm.part
-data/raw/youtube_audio/*.webm
-data/raw/youtube_audio/*.m4a
-notebooks/progree.ipynb
-notebooks/05_parallel_match_download.ipynb
-data/raw/youtube_metadata.csv
-*.mid
-data/raw/batch2_audio_features.csv
-data/raw/in_progress_dataset_batch1_only.csv
-data/raw/in_progress_dataset_before_batch2.csv
-data/raw/potential_overlap_with_groupmate.csv
-data/raw/songs_missing_features.csv
-data/raw/your_songs_57000_plus.csv
-notebooks/09_youtube_eda.ipynb
-notebooks/09b_batch2_feature_extraction.ipynb
-notebooks/09_youtube_eda.ipynb
-notebooks/10_merge_batch2_features.ipynb
-notebooks/10_merge_batches.ipynb
-notebooks/check_mp3_coverage_by_range.ipynb
-notebooks/debug_batch2_merge.ipynb
-notebooks/diagnostic_check_batches.ipynb
-notebooks/09_youtube_eda.ipynb
