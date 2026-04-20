@@ -73,16 +73,17 @@ docs/_build/
 .pybuilder/
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
+# Jupyter / IPython
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
 profile_default/
 ipython_config.py
 
 # Environments
 .env
 .envrc
+.env.local
+*.env
 .venv
 env/
 venv/
@@ -121,7 +122,7 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-# .vscode/
+#.vscode/
 
 # Ruff stuff:
 .ruff_cache/
@@ -137,10 +138,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-
-### JupyterNotebooks ###
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
 
 ### macOS ###
 .DS_Store
@@ -179,11 +176,10 @@ $RECYCLE.BIN/
 *.lnk
 
 # ==========================================
-# PROJECT-SPECIFIC IGNORES
+# PROJECT-SPECIFIC
 # ==========================================
 
-# ----- DATA: do not commit (large / reproducible; use scripts, Makefile, README) -----
-# Ignore all dataset outputs. Keep only .gitkeep so empty dirs stay in the repo.
+# Data (large / reproducible via Makefile & scripts). Keep only .gitkeep per tree.
 data/raw/**
 data/processed/**
 data/cleaned/**
@@ -192,28 +188,22 @@ data/interim/**
 !data/processed/.gitkeep
 !data/cleaned/.gitkeep
 
-# Explicit extras (redundant with ** above; kept for clarity)
-data/**/*.parquet
-
-# ----- MODEL FILES (LARGE) -----
-# Repo-root models/ (if used)
+# Trained weights & large artifacts (download from Hugging Face; do not commit)
 models/*.joblib
 models/*.pkl
 models/*.h5
 models/*.pt
 models/*.pth
-# notebooks/models/ — placeholder only. Do not commit trained weights; download from Hugging Face for inference/ensemble.
 notebooks/models/**
 !notebooks/models/.gitkeep
-# Generated plots (from notebooks; regenerate from training cells)
+
+# Notebook outputs (regenerate from cells)
 notebooks/images/**/*.png
 
-# ----- SECRETS -----
+# Secrets
 secrets.sh
-*.env
-.env.local
 
-# ----- OTHER DATA FILES -----
+# Generic binary / doc types we do not want in-repo
 *.dat
 *.efx
 *.gbr
@@ -226,24 +216,8 @@ secrets.sh
 *.vcf
 *.xml
 
-# ==============================================================================
-# NOTEBOOKS - WORK-IN-PROGRESS/OLD
-# ==============================================================================
-# Development notebooks (intermediate steps)
-notebooks/02_spotify_model_baseline.ipynb
-notebooks/03_youtube_matching.ipynb
-notebooks/04a_youtube_matching_ytdlp.ipynb
-notebooks/04b_youtube_audio_download.ipynb
-notebooks/05_parallel_match_download.ipynb
-notebooks/05b_batch2_DOWNLOAD_METADATA.ipynb
-notebooks/06_collect_youtube_metadata.ipynb
-notebooks/07_collect_youtube_metadata_NEW.ipynb
-notebooks/08_full_feature_extraction.ipynb
-notebooks/test_feature_extraction.ipynb
-notebooks/youtube_audio_features.ipynb
-notebooks/progree.ipynb
- 
-# Testing notebooks
-notebooks/test_*.ipynb
-notebooks/*test*.ipynb
-notebooks/scratch*.ipynb
+# Scratch / dev notebook patterns (any folder under notebooks/)
+notebooks/**/scratch*.ipynb
+notebooks/**/test_*.ipynb
+notebooks/**/*test*.ipynb
+notebooks/**/progree.ipynb
