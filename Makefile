@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-kaggle check-kaggle init-kaggle download-spotify download-lyrics
+.PHONY: help setup venv cleanup prereq setup-huggingface download-all download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
 
 # Colors
 GREEN  = \033[0;32m
@@ -11,6 +11,19 @@ NC     = \033[0m
 VENV_DIR := .venv
 PYTHON := ${VENV_DIR}/bin/python
 PIP := ${VENV_DIR}/bin/pip
+
+prereq: ## Check Python, pip, make, git, and Hugging Face CLI (if .venv exists)
+	@echo "$(BLUE)=== Prerequisites check ===$(NC)"
+	@printf "python3: "; command -v python3 >/dev/null && python3 --version || echo "$(RED)not found$(NC)"
+	@printf "pip:     "; (command -v pip3 >/dev/null && pip3 --version) || (command -v python3 >/dev/null && python3 -m pip --version 2>/dev/null) || echo "$(RED)not found$(NC)"
+	@printf "make:    "; command -v make >/dev/null && { make --version | head -n1; } || echo "$(RED)not found$(NC)"
+	@printf "git:     "; command -v git >/dev/null && git --version || echo "$(RED)not found$(NC)"
+	@printf "hf:      "; \
+		if [ -x "${VENV_DIR}/bin/hf" ]; then \
+			${VENV_DIR}/bin/hf version 2>/dev/null || ${VENV_DIR}/bin/hf --version 2>/dev/null || echo "$(GREEN)present in ${VENV_DIR}$(NC)"; \
+		else \
+			echo "$(YELLOW)not in ${VENV_DIR} yet — run: make setup && make setup-huggingface$(NC)"; \
+		fi
 
 help: ## Show the commands and their descriptions
 	@echo "$(BLUE)=== Makefile Commands ===$(NC)"
@@ -49,15 +62,16 @@ cleanup: ## Clean up the project
 # Custom targets
 # ------------------------------------------------------------
 
-setup-kaggle: ## Setup kaggle credentials
-	@echo "${YELLOW}Setting up Kaggle credentials...${NC}"
-	bash scripts/setup-kaggle.sh
-	@echo "${GREEN}Kaggle credentials setup successfully!${NC}"
+setup-huggingface: venv ## Install huggingface_hub and run hf auth login (Hub token)
+	@echo "${YELLOW}Installing huggingface_hub (if needed)...${NC}"
+	${PIP} install -q "huggingface_hub>=0.20.0"
+	@echo "${YELLOW}Hugging Face Hub login...${NC}"
+	bash scripts/setup-huggingface.sh
+	@echo "${GREEN}Hugging Face CLI configured.${NC}"
 	@echo ""
 	@echo "$(YELLOW)Next steps:$(NC)"
-	@echo "  1) Activate venv, run: 'source ${VENV_DIR}/bin/activate'"
-	@echo "  2) Install Kaggle API, run: 'pip install kaggle' (if not already installed)"
-	@echo "  3) Verify Kaggle API, run: 'kaggle -version'"
+	@echo "  Test:  ${VENV_DIR}/bin/hf auth whoami"
+	@echo "  Data:  make download-spotify   (and other make download-* targets)"
 
 
 venv: ## Create a virtual environment if it doesn't exist
@@ -73,12 +87,55 @@ setup: venv ## Install the dependencies, if venv doesn't exist
 	@echo "${GREEN}Dependencies installed successfully!${NC}"
 
 
-download-spotify: setup ## Download the Spotify dataset from Kaggle
+download-all: ## Run all eight download-* targets in pipeline order (requires Hugging Face auth)
+	@echo "$(BLUE)=== download-all: 8 steps ===$(NC)"
+	$(MAKE) download-spotify
+	$(MAKE) download-lyrics
+	$(MAKE) download-youtube-audio-features
+	$(MAKE) download-spotify-tracks-clean
+	$(MAKE) download-spotify-lyrics-clean
+	$(MAKE) download-youtube-features-clean
+	$(MAKE) download-vcp-combined-features
+	$(MAKE) download-vcp-combined-ensemble-stacking
+	@echo "$(GREEN)All downloads finished.$(NC)"
+
+
+download-spotify: setup ## Download Spotify tracks from Hugging Face (vancenceho/spotify-tracks → data/raw/)
 	@echo "${YELLOW}Downloading Spotify dataset...${NC}"
 	bash scripts/download-spotify.sh
 	@echo "${GREEN}Spotify dataset downloaded successfully!${NC}"
 
-download-lyrics: setup ## Download the Lyrics dataset from Kaggle
+download-lyrics: setup ## Download Spotify lyrics from Hugging Face (vancenceho/spotify-lyrics → data/raw/spotify_millsongdata.csv)
 	@echo "${YELLOW}Downloading Lyrics dataset...${NC}"
 	bash scripts/download-lyrics.sh
 	@echo "${GREEN}Lyrics dataset downloaded successfully!${NC}"
+
+download-youtube-audio-features: setup ## Download YouTube/Spotify audio features (vancenceho/youtube-spotify-audio-features → data/raw/)
+	@echo "${YELLOW}Downloading youtube-spotify-audio-features...${NC}"
+	bash scripts/download-youtube-audio-features.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-spotify-tracks-clean: setup ## Download cleaned Spotify tracks (vancenceho/spotify-tracks-clean → data/cleaned/)
+	@echo "${YELLOW}Downloading spotify-tracks-clean...${NC}"
+	bash scripts/download-spotify-tracks-clean.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-spotify-lyrics-clean: setup ## Download cleaned lyrics (vancenceho/spotify-lyrics-clean → data/cleaned/lyrics_cleaned.csv)
+	@echo "${YELLOW}Downloading spotify-lyrics-clean...${NC}"
+	bash scripts/download-spotify-lyrics-clean.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-youtube-features-clean: setup ## Download cleaned YouTube features (vancenceho/youtube-features-clean → data/processed/)
+	@echo "${YELLOW}Downloading youtube-features-clean...${NC}"
+	bash scripts/download-youtube-features-clean.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-vcp-combined-features: setup ## Download combined ensemble features (vancenceho/vcp-combined-features → data/processed/)
+	@echo "${YELLOW}Downloading vcp-combined-features...${NC}"
+	bash scripts/download-vcp-combined-features.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-vcp-combined-ensemble-stacking: setup ## Download ensemble/stacking models (vancenceho/vcp-combined-ensemble-stacking → notebooks/models/)
+	@echo "${YELLOW}Downloading vcp-combined-ensemble-stacking...${NC}"
+	bash scripts/download-vcp-combined-ensemble-stacking.sh
+	@echo "${GREEN}Download finished.${NC}"
