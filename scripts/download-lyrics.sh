@@ -1,52 +1,55 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Download the Spotify lyrics (Million Song-style) dataset from Hugging Face into data/raw/.
+# Default repo: vancenceho/spotify-lyrics — override with HF_LYRICS_REPO if needed.
+#
+# Notebooks expect: data/raw/spotify_millsongdata.csv (see explore_lyrics_clean.ipynb).
+# If the Hub snapshot uses dataset.csv, it is renamed to spotify_millsongdata.csv.
+#
+# Requires: pip install huggingface_hub (see: make setup)
+# Private repo: hf auth login  or  export HF_TOKEN=...
+set -euo pipefail
 
-# Name of your virtual environment folder
-VENV_DIR="venv"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+export PATH="${ROOT}/.venv/bin:${PATH}"
 
-# Dataset target directory
-DATA_DIR="data/raw"
-DATA_FILE="$DATA_DIR/spotify_million_song_dataset.csv"  # adjust if filename differs
+HF_LYRICS_REPO="${HF_LYRICS_REPO:-vancenceho/spotify-lyrics}"
+LOCAL_DIR="${HF_LYRICS_LOCAL_DIR:-${ROOT}/data/raw}"
+MAIN_FILE="${LOCAL_DIR}/spotify_millsongdata.csv"
 
-# Kaggle dataset identifier
-DATASET="notshrirang/spotify-million-song-dataset"
-
-echo "Checking virtual environment..."
-
-# Activate venv if not active
-if [[ -z "$VIRTUAL_ENV" ]]; then
-    echo "Virtual environment not activated. Activating..."
-    source "$VENV_DIR/bin/activate"
+if command -v hf &>/dev/null; then
+  HF_DL=(hf download)
+elif command -v huggingface-cli &>/dev/null; then
+  HF_DL=(huggingface-cli download)
 else
-    echo "Virtual environment is already active."
+  echo "HF CLI not found. Run: make setup  (installs huggingface_hub → hf)" >&2
+  exit 1
 fi
 
-# Check if kaggle CLI is installed
-if ! command -v kaggle &> /dev/null; then
-    echo "Kaggle CLI not found. Installing..."
-    pip install kaggle
+mkdir -p "$LOCAL_DIR"
+
+# Hub often ships dataset.csv — notebooks expect spotify_millsongdata.csv
+rename_lyrics_csv() {
+  if [[ -f "${LOCAL_DIR}/dataset.csv" ]]; then
+    mv -f "${LOCAL_DIR}/dataset.csv" "$MAIN_FILE"
+    echo "Renamed dataset.csv → spotify_millsongdata.csv"
+  fi
+}
+
+SKIP="${HF_SKIP_EXISTING:-1}"
+if [[ "$SKIP" != "0" && "$SKIP" != "false" ]] && [[ -f "$MAIN_FILE" ]]; then
+  echo "Skip: $MAIN_FILE already exists (set HF_SKIP_EXISTING=0 to re-download)."
+  exit 0
 fi
 
-# Ensure Kaggle config is accessible
-export KAGGLE_CONFIG_DIR="$HOME/.kaggle"
-
-# Check if kaggle.json exists
-if [[ ! -f "$KAGGLE_CONFIG_DIR/kaggle.json" ]]; then
-    echo "Kaggle API credentials not found in $KAGGLE_CONFIG_DIR/kaggle.json"
-    echo "Download it from https://www.kaggle.com/me/account"
-    exit 1
+if [[ "$SKIP" != "0" && "$SKIP" != "false" ]] && [[ -f "${LOCAL_DIR}/dataset.csv" ]]; then
+  rename_lyrics_csv
+  exit 0
 fi
 
-# Create data directory
-mkdir -p "$DATA_DIR"
-
-# Check if dataset already exists
-if [[ -f "$DATA_FILE" ]]; then
-    echo "Dataset already exists at $DATA_FILE. Skipping download."
-else
-    echo "Downloading dataset..."
-    kaggle datasets download -d "$DATASET" -p "$DATA_DIR" --unzip
-    echo "Dataset downloaded to $DATA_DIR."
-
-    echo "Files in directory:"
-    ls -lh "$DATA_DIR"
-fi
+echo "Downloading ${HF_LYRICS_REPO} → ${LOCAL_DIR}"
+# Skip Hub repo docs (does not delete an existing local data/raw/README.md you maintain yourself)
+"${HF_DL[@]}" "${HF_LYRICS_REPO}" --repo-type dataset --local-dir "${LOCAL_DIR}" \
+  --exclude 'README.md' --exclude 'readme.md' --exclude 'README.rst' --exclude 'README.txt' --exclude 'README'
+rename_lyrics_csv
+echo "Done."
