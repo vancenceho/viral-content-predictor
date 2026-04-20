@@ -73,16 +73,17 @@ docs/_build/
 .pybuilder/
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
+# Jupyter / IPython
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
 profile_default/
 ipython_config.py
 
 # Environments
 .env
 .envrc
+.env.local
+*.env
 .venv
 env/
 venv/
@@ -121,7 +122,7 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-# .vscode/
+#.vscode/
 
 # Ruff stuff:
 .ruff_cache/
@@ -137,10 +138,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-
-### JupyterNotebooks ###
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
 
 ### macOS ###
 .DS_Store
@@ -179,40 +176,37 @@ $RECYCLE.BIN/
 *.lnk
 
 # ==========================================
-# PROJECT-SPECIFIC IGNORES
+# PROJECT-SPECIFIC
 # ==========================================
 
-# ===== AUDIO FILES (LARGE - DO NOT COMMIT) =====
-# Ignore ALL .wav files in the youtube_audio directory
-# Audio files (large)
-data/raw/youtube_audio/*.mp3  # ← Changed from .wav
-data/raw/youtube_audio/**/*.mp3
+# Data: raw/processed/cleaned/interim stay out of git (use Makefile / Hugging Face downloads).
+# Keep only .gitkeep and .gitattributes under data/raw/ and data/cleaned/ (LFS pointers / metadata).
+data/raw/**
+data/cleaned/**
+data/processed/**
+data/interim/**
+!data/raw/.gitkeep
+!data/raw/.gitattributes
+!data/cleaned/.gitkeep
+!data/cleaned/.gitattributes
+!data/processed/.gitkeep
 
-# ===== PROCESSED DATA CSVs (CAN BE REGENERATED) =====
-# These are outputs from processing - don't commit them
-data/raw/combined_match_download_results.csv
-data/raw/youtube_matches.csv
-data/raw/youtube_download_status.csv
-data/interim/youtube_audio_features*.csv
-data/processed/*.csv
-
-# ===== KEEP IMPORTANT CSVs (OVERRIDE ABOVE) =====
-# IMPORTANT: Keep the original Spotify dataset!
-!data/raw/spotify_tracks.csv
-!data/raw/spotify_cleaned.csv
-
-# ===== MODEL FILES (LARGE) =====
+# Trained weights & large artifacts (download from Hugging Face; do not commit)
 models/*.joblib
 models/*.pkl
 models/*.h5
 models/*.pt
+models/*.pth
+notebooks/models/**
+!notebooks/models/.gitkeep
 
-# ===== SECRETS =====
+# Notebook outputs (regenerate from cells)
+notebooks/images/**/*.png
+
+# Secrets
 secrets.sh
-*.env
-.env.local
 
-# ===== OTHER DATA FILES =====
+# Generic binary / doc types we do not want in-repo
 *.dat
 *.efx
 *.gbr
@@ -225,76 +219,8 @@ secrets.sh
 *.vcf
 *.xml
 
-# ==============================================================================
-# AUDIO FILES - MP3s (100+ GB - DO NOT COMMIT!)
-# ==============================================================================
-data/raw/youtube_audio/*.mp3
-data/raw/youtube_audio/**/*.mp3
- 
-# ==============================================================================
-# RAW DATA - INTERMEDIATE/WORK-IN-PROGRESS FILES
-# ==============================================================================
-# In-progress dataset (work file, not final)
-data/raw/in_progress_dataset.csv
- 
-# Batch processing results (can be regenerated)
-data/raw/batch2_match_download_results.csv
-data/raw/batch2_youtube_metadata.csv
- 
-# Combined results (can be regenerated)
-data/raw/combined_match_download_results.csv
- 
-# ==============================================================================
-# PROCESSED DATA - OLD/SUPERSEDED FILES
-# ==============================================================================
-# Old unfiltered version (superseded by cleaned versions)
-data/processed/modeling_dataset.csv
- 
-# ==============================================================================
-# KEEP FINAL CLEANED DATASETS (OVERRIDE)
-# ==============================================================================
-# Make sure these are NOT ignored
-!data/processed/youtube_features_cleaned.csv
-!data/processed/combined_features_cleaned.csv
-!data/processed/spotify_tracks_cleaned.csv
- 
-# ==============================================================================
-# NOTEBOOKS - WORK-IN-PROGRESS/OLD
-# ==============================================================================
-# Development notebooks (intermediate steps)
-notebooks/02_spotify_model_baseline.ipynb
-notebooks/03_youtube_matching.ipynb
-notebooks/04a_youtube_matching_ytdlp.ipynb
-notebooks/04b_youtube_audio_download.ipynb
-notebooks/05_parallel_match_download.ipynb
-notebooks/05b_batch2_DOWNLOAD_METADATA.ipynb
-notebooks/06_collect_youtube_metadata.ipynb
-notebooks/07_collect_youtube_metadata_NEW.ipynb
-notebooks/08_full_feature_extraction.ipynb
-notebooks/test_feature_extraction.ipynb
-notebooks/youtube_audio_features.ipynb
-notebooks/progree.ipynb
- 
-# Testing notebooks
-notebooks/test_*.ipynb
-notebooks/*test*.ipynb
-notebooks/scratch*.ipynb
- 
-# ==============================================================================
-# MODELS - LARGE TRAINED MODEL FILES
-# ==============================================================================
-models/*.joblib
-models/*.pkl
-models/*.h5
-models/*.pt
-models/*.pth
-
-data/raw/youtube_audio/*.part
-data/raw/youtube_audio/**/*.part
-data/raw/youtube_audio/*.webm.part
-data/raw/youtube_audio/**/*.webm.part
-data/raw/youtube_audio/*.webm
-data/raw/youtube_audio/*.m4a
-notebooks/progree.ipynb
-notebooks/05_parallel_match_download.ipynb
-data/raw/youtube_metadata.csv
+# Scratch / dev notebook patterns (any folder under notebooks/)
+notebooks/**/scratch*.ipynb
+notebooks/**/test_*.ipynb
+notebooks/**/*test*.ipynb
+notebooks/**/progree.ipynb

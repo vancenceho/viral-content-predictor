@@ -5,14 +5,16 @@ seaborn
 streamlit
 scikit-learn
 xgboost
+lightgbm
 jupyter
 scipy
 statsmodels
 xarray
 dask
-kaggle
+huggingface_hub>=0.20.0
 librosa
 soundfile
 audioread
 tqdm
 yt-dlp
+umap-learn
