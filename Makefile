@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-huggingface download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
+.PHONY: help setup venv cleanup prereq setup-huggingface download-all download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
 
 # Colors
 GREEN  = \033[0;32m
@@ -11,6 +11,19 @@ NC     = \033[0m
 VENV_DIR := .venv
 PYTHON := ${VENV_DIR}/bin/python
 PIP := ${VENV_DIR}/bin/pip
+
+prereq: ## Check Python, pip, make, git, and Hugging Face CLI (if .venv exists)
+	@echo "$(BLUE)=== Prerequisites check ===$(NC)"
+	@printf "python3: "; command -v python3 >/dev/null && python3 --version || echo "$(RED)not found$(NC)"
+	@printf "pip:     "; (command -v pip3 >/dev/null && pip3 --version) || (command -v python3 >/dev/null && python3 -m pip --version 2>/dev/null) || echo "$(RED)not found$(NC)"
+	@printf "make:    "; command -v make >/dev/null && { make --version | head -n1; } || echo "$(RED)not found$(NC)"
+	@printf "git:     "; command -v git >/dev/null && git --version || echo "$(RED)not found$(NC)"
+	@printf "hf:      "; \
+		if [ -x "${VENV_DIR}/bin/hf" ]; then \
+			${VENV_DIR}/bin/hf version 2>/dev/null || ${VENV_DIR}/bin/hf --version 2>/dev/null || echo "$(GREEN)present in ${VENV_DIR}$(NC)"; \
+		else \
+			echo "$(YELLOW)not in ${VENV_DIR} yet — run: make setup && make setup-huggingface$(NC)"; \
+		fi
 
 help: ## Show the commands and their descriptions
 	@echo "$(BLUE)=== Makefile Commands ===$(NC)"
@@ -72,6 +85,19 @@ setup: venv ## Install the dependencies, if venv doesn't exist
 	@echo "${YELLOW}Installing dependencies...${NC}"
 	${PIP} install -r requirements.txt
 	@echo "${GREEN}Dependencies installed successfully!${NC}"
+
+
+download-all: ## Run all eight download-* targets in pipeline order (requires Hugging Face auth)
+	@echo "$(BLUE)=== download-all: 8 steps ===$(NC)"
+	$(MAKE) download-spotify
+	$(MAKE) download-lyrics
+	$(MAKE) download-youtube-audio-features
+	$(MAKE) download-spotify-tracks-clean
+	$(MAKE) download-spotify-lyrics-clean
+	$(MAKE) download-youtube-features-clean
+	$(MAKE) download-vcp-combined-features
+	$(MAKE) download-vcp-combined-ensemble-stacking
+	@echo "$(GREEN)All downloads finished.$(NC)"
 
 
 download-spotify: setup ## Download Spotify tracks from Hugging Face (vancenceho/spotify-tracks → data/raw/)
