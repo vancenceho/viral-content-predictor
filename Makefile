@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup setup-huggingface download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features
+.PHONY: help setup venv cleanup setup-huggingface download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
 
 # Colors
 GREEN  = \033[0;32m
@@ -107,4 +107,9 @@ download-youtube-features-clean: setup ## Download cleaned YouTube features (van
 download-vcp-combined-features: setup ## Download combined ensemble features (vancenceho/vcp-combined-features → data/processed/)
 	@echo "${YELLOW}Downloading vcp-combined-features...${NC}"
 	bash scripts/download-vcp-combined-features.sh
+	@echo "${GREEN}Download finished.${NC}"
+
+download-vcp-combined-ensemble-stacking: setup ## Download ensemble/stacking models (vancenceho/vcp-combined-ensemble-stacking → notebooks/models/)
+	@echo "${YELLOW}Downloading vcp-combined-ensemble-stacking...${NC}"
+	bash scripts/download-vcp-combined-ensemble-stacking.sh
 	@echo "${GREEN}Download finished.${NC}"
