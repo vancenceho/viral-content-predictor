@@ -125,7 +125,7 @@ for idx, (filename, title) in enumerate(zip(image_filenames, image_titles)):
     with col:
         try:
             if os.path.exists(image_path):
-                st.image(image_path, caption=title, use_container_width=True)
+                st.image(image_path, caption=title, width='stretch')
             else:
                 st.warning(f"Image not found: {image_path}")
         except Exception as e:
