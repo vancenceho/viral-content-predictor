@@ -87,3 +87,46 @@ if st.button("Predict Virality"):
     except Exception as e:
         st.error(f"❌ Error making prediction: {e}")
 
+st.divider()
+st.subheader("📊 Data Analysis Visualizations")
+
+# Get the directory where this script is located
+script_dir = os.path.dirname(os.path.abspath(__file__))
+assets_dir = os.path.join(script_dir, "Streamlit Assets")
+
+# Define image filenames
+image_filenames = [
+    "popularity_distribution.png",
+    "audio_feature_pop_scatter.png",
+    "key_audio_features_distribution.png",
+    "point_biserial_correlation_features_virality.png",
+    "correlation_heatmap_pop.png",
+    "viral_non_viral_boxplots.png",
+    "virality_rate_by_genre.png",
+    "top_20_popular_artists.png",
+]
+
+image_titles = [
+    "Popularity Distribution",
+    "Audio Feature Population Scatter",
+    "Key Audio Features Distribution",
+    "Point-Biserial Correlation with Virality",
+    "Correlation Heatmap",
+    "Viral vs Non-Viral Boxplots",
+    "Virality Rate by Genre",
+    "Top 20 Popular Artists",
+]
+
+# Display images in a 2-column layout
+cols = st.columns(2)
+for idx, (filename, title) in enumerate(zip(image_filenames, image_titles)):
+    image_path = os.path.join(assets_dir, filename)
+    col = cols[idx % 2]
+    with col:
+        try:
+            if os.path.exists(image_path):
+                st.image(image_path, caption=title, use_container_width=True)
+            else:
+                st.warning(f"Image not found: {image_path}")
+        except Exception as e:
+            st.error(f"Error loading {title}: {e}")
