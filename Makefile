@@ -1,4 +1,4 @@
-.PHONY: help setup venv cleanup prereq setup-huggingface download-all download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
+.PHONY: help setup venv rm-venv app cleanup prereq setup-huggingface download-all download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
 
 # Colors
 GREEN  = \033[0;32m
@@ -77,9 +77,14 @@ setup-huggingface: venv ## Install huggingface_hub and run hf auth login (Hub to
 venv: ## Create a virtual environment if it doesn't exist
 	@if [ ! -d "${VENV_DIR}" ]; then \
 		echo "${YELLOW}Creating virtual environment...${NC}"; \
-		${PYTHON} -m venv ${VENV_DIR}; \
+		python3 -m venv ${VENV_DIR} && \
 		echo "${GREEN}Virtual environment created successfully!${NC}"; \
 	fi
+
+rm-venv: ## Remove the virtual environment
+	@echo "${YELLOW}Removing virtual environment...${NC}"
+	rm -rf ${VENV_DIR}
+	@echo "${GREEN}Virtual environment removed successfully! Run 'make venv' to create a new one and 'make setup' to install the dependencies.${NC}"
 
 setup: venv ## Install the dependencies, if venv doesn't exist
 	@echo "${YELLOW}Installing dependencies...${NC}"
@@ -99,6 +104,10 @@ download-all: ## Run all eight download-* targets in pipeline order (requires Hu
 	$(MAKE) download-vcp-combined-ensemble-stacking
 	@echo "$(GREEN)All downloads finished.$(NC)"
 
+app: setup ## Run the Streamlit app
+	@echo "${YELLOW}Running Streamlit app...${NC}"
+	@echo "${GREEN}Streamlit app running on http://localhost:8501${NC}"
+	streamlit run app/app.py
 
 download-spotify: setup ## Download Spotify tracks from Hugging Face (vancenceho/spotify-tracks → data/raw/)
 	@echo "${YELLOW}Downloading Spotify dataset...${NC}"
