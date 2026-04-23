@@ -1,4 +1,4 @@
-.PHONY: help setup venv rm-venv cleanup prereq setup-huggingface download-all download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
+.PHONY: help setup venv rm-venv app cleanup prereq setup-huggingface download-all download-spotify download-lyrics download-youtube-audio-features download-spotify-tracks-clean download-spotify-lyrics-clean download-youtube-features-clean download-vcp-combined-features download-vcp-combined-ensemble-stacking
 
 # Colors
 GREEN  = \033[0;32m
@@ -104,6 +104,10 @@ download-all: ## Run all eight download-* targets in pipeline order (requires Hu
 	$(MAKE) download-vcp-combined-ensemble-stacking
 	@echo "$(GREEN)All downloads finished.$(NC)"
 
+app: setup ## Run the Streamlit app
+	@echo "${YELLOW}Running Streamlit app...${NC}"
+	@echo "${GREEN}Streamlit app running on http://localhost:8501${NC}"
+	streamlit run app/app.py
 
 download-spotify: setup ## Download Spotify tracks from Hugging Face (vancenceho/spotify-tracks → data/raw/)
 	@echo "${YELLOW}Downloading Spotify dataset...${NC}"
