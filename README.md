@@ -8,7 +8,7 @@ End-to-end pipeline to relate **Spotify** track data, **lyrics**, **YouTube** ma
 
 ## Prerequisites
 
-- **Python 3.10+** (recommended)
+- **Python 3.10+** (3.12+ or 3.14 works; for notebooks and ML stack, a stable 3.12 venv is often smoother than the newest patch release)
 - **Git**
 - **Make** (optional but recommended for setup and data downloads)
 - A [Hugging Face](https://huggingface.co/) account and token for datasets and pretrained artifacts (see below)
@@ -48,11 +48,15 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Or use the Makefile helper (creates `.venv` if missing):
+Or use the Makefile helper (creates `.venv` with `python3 -m venv` if missing, then installs dependencies):
 
 ```bash
 make setup
 ```
+
+To **remove only** the virtual environment (keeps `data/`), use `make rm-venv` and then `make setup` again when you want a clean env.
+
+> **`requirements.txt`** in this repo is a **fully pinned** dependency set (suitable for `pip install -r` in a fresh venv). If you maintain a shorter “loose” list elsewhere, keep it under another filename so installs stay reproducible.
 
 ### 3. Hugging Face CLI login
 
@@ -104,6 +108,26 @@ make download-all
 Re-run a single target after `HF_SKIP_EXISTING=0` if you need to force a refresh. See `make help` for short descriptions of each target.
 
 > **Note:** Large files stay **out of Git** (see `.gitignore`). Local-only CSVs and models are optional if you regenerate everything from notebooks instead.
+
+### 5. Streamlit demo (optional)
+
+The project includes a small **Streamlit** UI under `app/` that loads the **stacking ensemble** (RF, XGBoost, LightGBM, meta-learner, scaler) from Hugging Face Hub (`vancenceho/vcp-combined-ensemble-stacking`) and serves predictions plus static EDA figures from `app/assets/`.
+
+- Complete **`make setup`** and **`make setup-huggingface`** first (Hub token required for the first model download).
+- From the repository root:
+
+```bash
+make app
+```
+
+This target runs `make setup` to ensure the venv and dependencies exist, then starts Streamlit (default URL **http://localhost:8501**).
+
+To run the same entrypoint manually with the venv active:
+
+```bash
+source .venv/bin/activate
+streamlit run app/app.py
+```
 
 ---
 
@@ -163,8 +187,11 @@ Run Jupyter from the repo with the venv activated. Paths in notebooks assume exe
 viral-content-predictor/
 ├── README.md
 ├── LICENSE
-├── Makefile                 # setup, Hugging Face login, download-* targets
-├── requirements.txt
+├── Makefile                 # setup, venv/rm-venv, app (Streamlit), download-* targets
+├── requirements.txt         # pinned transitive deps (full lock-style list)
+├── app/
+│   ├── app.py              # Streamlit app (Hub models + JSON feature input)
+│   └── assets/             # EDA figures for the UI
 ├── docs/
 │   ├── pipeline-architecture.png
 │   ├── project-report.pdf
@@ -192,12 +219,14 @@ viral-content-predictor/
 | ------------------------ | ------------------------------------------------------------- |
 | `make help`              | List all targets                                              |
 | `make prereq`            | Print versions for Python, pip, make, git, and `hf` (if venv exists) |
-| `make venv`              | Create `.venv` only                                           |
+| `make venv`              | Create `.venv` with `python3 -m venv` if it does not exist   |
+| `make rm-venv`           | Delete `.venv` only (does **not** remove `data/`)            |
 | `make setup`             | Create venv + `pip install -r requirements.txt`               |
-| `make setup-huggingface` | Install `huggingface_hub` + `hf auth login`                   |
+| `make setup-huggingface` | Install `huggingface_hub` + `hf auth login`                 |
+| `make app`               | Run `make setup`, then the Streamlit app (`app/app.py` → `http://localhost:8501`) |
 | `make download-all`      | Run all eight `download-*` targets in pipeline order          |
 | `make download-<name>`   | See [§ Download datasets](#4-download-datasets-and-artifacts) |
-| `make cleanup`           | Remove venv and scratch data files (destructive)              |
+| `make cleanup`           | Remove venv **and** scratch data files under `data/` (destructive) |
 
 ---
 
